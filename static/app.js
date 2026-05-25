@@ -3,7 +3,7 @@ const input = document.querySelector("#message-input");
 const messages = document.querySelector("#messages");
 const statusBadge = document.querySelector("#status");
 
-function addMessage(role, text, sources = []) {
+function addMessage(role, text, sources = [], scheduleInsight = null) {
   const article = document.createElement("article");
   article.className = `message ${role}`;
 
@@ -11,6 +11,18 @@ function addMessage(role, text, sources = []) {
   bubble.className = "bubble";
   bubble.textContent = text;
   article.appendChild(bubble);
+
+  if (scheduleInsight) {
+    const insight = document.createElement("div");
+    insight.className = "schedule-insight";
+    // Render **bold** markers
+    insight.innerHTML = scheduleInsight
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\n/g, "<br>");
+    article.appendChild(insight);
+  }
 
   if (sources.length > 0) {
     const sourceList = document.createElement("ol");
@@ -73,7 +85,7 @@ form.addEventListener("submit", async (event) => {
       return;
     }
 
-    addMessage("assistant", payload.answer, payload.sources || []);
+    addMessage("assistant", payload.answer, payload.sources || [], payload.schedule_insight || null);
   } catch (error) {
     pending.remove();
     addMessage("assistant", "The request could not be completed. Check the server logs.");

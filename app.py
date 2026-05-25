@@ -7,6 +7,7 @@ from config import DATABASE_PATH
 from db import connect, init_db
 from rag import answer_question, retrieve, source_payload
 from relevance_agent import evaluate_relevance
+from schedule_agent import extract_codes_from_chunks, predict_offerings
 
 
 app = Flask(__name__)
@@ -65,12 +66,17 @@ def chat():
 
     chunks = retrieve(client, question)
     answer = answer_question(client, question, chunks)
+
+    codes = extract_codes_from_chunks([(c.title, c.filename) for c in chunks])
+    schedule_insight = predict_offerings(codes)
+
     return jsonify(
         {
             "blocked": False,
             "answer": answer,
             "sources": source_payload(chunks),
             "relevance": relevance,
+            "schedule_insight": schedule_insight,
         }
     )
 

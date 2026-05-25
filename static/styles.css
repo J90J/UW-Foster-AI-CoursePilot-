@@ -122,6 +122,16 @@ p {
   border: 1px solid var(--line);
 }
 
+.schedule-insight {
+  padding: 10px 14px;
+  border-radius: 6px;
+  border-left: 3px solid var(--accent);
+  background: #f0f7f1;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
 .sources {
   margin: 0;
   padding-left: 24px;
