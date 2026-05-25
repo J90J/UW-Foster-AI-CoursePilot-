@@ -4,10 +4,8 @@ const messages  = document.querySelector("#messages");
 const statusEl  = document.querySelector("#status");
 const welcome   = document.querySelector("#welcome");
 
-// Gemini-style star SVG for assistant avatar
-const STAR_SVG = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M12 2C12 2 12.5 7.5 15 10C17.5 12.5 23 12 23 12C23 12 17.5 11.5 15 14C12.5 16.5 12 22 12 22C12 22 11.5 16.5 9 14C6.5 11.5 1 12 1 12C1 12 6.5 12.5 9 10C11.5 7.5 12 2 12 2Z" fill="white"/>
-</svg>`;
+const ASSISTANT_LABEL = "AI";
+const USER_LABEL = "You";
 
 function hideWelcome() {
   if (welcome) welcome.style.display = "none";
@@ -22,11 +20,7 @@ function addMessage(role, text, sources = [], scheduleInsight = null) {
   // Avatar
   const avatar = document.createElement("div");
   avatar.className = "avatar";
-  if (role === "assistant") {
-    avatar.innerHTML = STAR_SVG;
-  } else {
-    avatar.textContent = "You";
-  }
+  avatar.textContent = role === "assistant" ? ASSISTANT_LABEL : USER_LABEL;
   article.appendChild(avatar);
 
   // Body
@@ -73,7 +67,7 @@ function addThinking() {
 
   const avatar = document.createElement("div");
   avatar.className = "avatar";
-  avatar.innerHTML = STAR_SVG;
+  avatar.textContent = ASSISTANT_LABEL;
   article.appendChild(avatar);
 
   const body = document.createElement("div");

@@ -6,7 +6,7 @@
     <title>Foster MBA Course Assistant</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600&family=Google+Sans+Text:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/styles.css">
   </head>
   <body>
@@ -14,19 +14,14 @@
 
       <header class="topbar">
         <div class="brand">
-          <svg class="gem-star" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%"   stop-color="#4285F4"/>
-                <stop offset="50%"  stop-color="#9C6CF4"/>
-                <stop offset="100%" stop-color="#EA4335"/>
-              </linearGradient>
-            </defs>
-            <path d="M18 2 C18 2 19 11 23 15 C27 19 36 18 36 18 C36 18 27 17 23 21 C19 25 18 34 18 34 C18 34 17 25 13 21 C9 17 0 18 0 18 C0 18 9 19 13 15 C17 11 18 2 18 2 Z" fill="url(#g1)"/>
-          </svg>
+          <div class="brand-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
+            </svg>
+          </div>
           <div>
-            <h1>Foster MBA <span class="grad-text">Course Assistant</span></h1>
-            <p class="topbar-sub">Powered by Gemini · UW Foster School of Business</p>
+            <h1>Foster MBA <span>Course Assistant</span></h1>
+            <p class="topbar-sub">UW Foster School of Business</p>
           </div>
         </div>
         <span id="status" class="status-pill">Checking…</span>
@@ -36,21 +31,18 @@
         <div id="messages" class="messages">
 
           <div class="welcome" id="welcome">
-            <svg class="welcome-star" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%"   stop-color="#4285F4"/>
-                  <stop offset="50%"  stop-color="#9C6CF4"/>
-                  <stop offset="100%" stop-color="#EA4335"/>
-                </linearGradient>
-              </defs>
-              <path d="M32 3 C32 3 34 20 40 26 C46 32 63 32 63 32 C63 32 46 32 40 38 C34 44 32 61 32 61 C32 61 30 44 24 38 C18 32 1 32 1 32 C1 32 18 32 24 26 C30 20 32 3 32 3 Z" fill="url(#g2)"/>
-            </svg>
-            <h2 class="welcome-title">Hello, Foster MBA student</h2>
-            <p class="welcome-sub">I can recommend electives based on your career goals, explain what a course covers, and tell you when it's historically been offered. What are you looking for?</p>
+            <div class="welcome-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>
+              </svg>
+            </div>
+            <h2>Find your <span>perfect course</span></h2>
+            <p class="welcome-sub">
+              Describe your career goal or interests and I'll recommend the best Foster MBA electives — plus tell you when they're typically offered.
+            </p>
             <div class="chips">
               <button class="chip">Which courses fit a corporate finance goal?</button>
-              <button class="chip">What does MGMT 547 cover and when is it offered?</button>
+              <button class="chip">What does MGMT 547 cover?</button>
               <button class="chip">I'm interested in startups — what should I take?</button>
               <button class="chip">Which courses cover sustainability or ESG?</button>
             </div>
