@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import json
 
 from openai import OpenAI
@@ -44,4 +46,3 @@ def evaluate_relevance(client: OpenAI, message: str) -> dict[str, object]:
             or "Ask about Foster MBA courses, syllabi, grading, schedules, or electives."
         ),
     }
-

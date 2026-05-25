@@ -4,39 +4,72 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Foster MBA Course Assistant</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600&family=Google+Sans+Text:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/styles.css">
   </head>
   <body>
-    <main class="app-shell">
-      <section class="chat-panel" aria-label="Foster MBA course assistant">
-        <header class="topbar">
-          <div>
-            <h1>Foster MBA Course Assistant</h1>
-            <p>Ask about electives, syllabi, grading, assignments, schedules, or course fit.</p>
-          </div>
-          <div id="status" class="status">Checking database</div>
-        </header>
+    <div class="app-shell">
 
+      <header class="topbar">
+        <div class="brand">
+          <svg class="gem-star" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%"   stop-color="#4285F4"/>
+                <stop offset="50%"  stop-color="#9C6CF4"/>
+                <stop offset="100%" stop-color="#EA4335"/>
+              </linearGradient>
+            </defs>
+            <path d="M18 2 C18 2 19 11 23 15 C27 19 36 18 36 18 C36 18 27 17 23 21 C19 25 18 34 18 34 C18 34 17 25 13 21 C9 17 0 18 0 18 C0 18 9 19 13 15 C17 11 18 2 18 2 Z" fill="url(#g1)"/>
+          </svg>
+          <div>
+            <h1>Foster MBA <span class="grad-text">Course Assistant</span></h1>
+            <p class="topbar-sub">Powered by Gemini · UW Foster School of Business</p>
+          </div>
+        </div>
+        <span id="status" class="status-pill">Checking…</span>
+      </header>
+
+      <main class="chat-panel">
         <div id="messages" class="messages">
-          <article class="message assistant">
-            <div class="bubble">
-              Ask a Foster MBA course-planning question, such as: "Which electives fit a corporate finance goal?"
+
+          <div class="welcome" id="welcome">
+            <svg class="welcome-star" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%"   stop-color="#4285F4"/>
+                  <stop offset="50%"  stop-color="#9C6CF4"/>
+                  <stop offset="100%" stop-color="#EA4335"/>
+                </linearGradient>
+              </defs>
+              <path d="M32 3 C32 3 34 20 40 26 C46 32 63 32 63 32 C63 32 46 32 40 38 C34 44 32 61 32 61 C32 61 30 44 24 38 C18 32 1 32 1 32 C1 32 18 32 24 26 C30 20 32 3 32 3 Z" fill="url(#g2)"/>
+            </svg>
+            <h2 class="welcome-title">Hello, Foster MBA student</h2>
+            <p class="welcome-sub">I can recommend electives based on your career goals, explain what a course covers, and tell you when it's historically been offered. What are you looking for?</p>
+            <div class="chips">
+              <button class="chip">Which courses fit a corporate finance goal?</button>
+              <button class="chip">What does MGMT 547 cover and when is it offered?</button>
+              <button class="chip">I'm interested in startups — what should I take?</button>
+              <button class="chip">Which courses cover sustainability or ESG?</button>
             </div>
-          </article>
+          </div>
+
         </div>
 
-        <form id="chat-form" class="composer">
-          <textarea
-            id="message-input"
-            rows="2"
-            placeholder="Ask about Foster MBA courses..."
-            required
-          ></textarea>
-          <button type="submit">Send</button>
-        </form>
-      </section>
-    </main>
+        <div class="composer-area">
+          <form id="chat-form" class="composer">
+            <textarea id="message-input" rows="1" placeholder="Ask about Foster MBA courses…" required></textarea>
+            <button type="submit" class="send-btn" aria-label="Send">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+            </button>
+          </form>
+          <p class="disclaimer">Answers are based on Foster MBA syllabi and past schedules only.</p>
+        </div>
+      </main>
+
+    </div>
     <script src="/static/app.js"></script>
   </body>
 </html>
-
