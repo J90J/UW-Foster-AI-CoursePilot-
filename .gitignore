@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+open_ai_key.txt
+*openai*key*.txt
+*api*key*.txt
+
+# Local generated data
+*.sqlite3
+*.sqlite
+*.db
+
+# OS/editor noise
+.DS_Store
+.vscode/
+.idea/

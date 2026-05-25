@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Foster MBA Course Assistant</title>
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="chat-panel" aria-label="Foster MBA course assistant">
+        <header class="topbar">
+          <div>
+            <h1>Foster MBA Course Assistant</h1>
+            <p>Ask about electives, syllabi, grading, assignments, schedules, or course fit.</p>
+          </div>
+          <div id="status" class="status">Checking database</div>
+        </header>
+
+        <div id="messages" class="messages">
+          <article class="message assistant">
+            <div class="bubble">
+              Ask a Foster MBA course-planning question, such as: "Which electives fit a corporate finance goal?"
+            </div>
+          </article>
+        </div>
+
+        <form id="chat-form" class="composer">
+          <textarea
+            id="message-input"
+            rows="2"
+            placeholder="Ask about Foster MBA courses..."
+            required
+          ></textarea>
+          <button type="submit">Send</button>
+        </form>
+      </section>
+    </main>
+    <script src="/static/app.js"></script>
+  </body>
+</html>
+
