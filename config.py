@@ -15,6 +15,9 @@ if not os.getenv("OPENAI_API_KEY"):
 
 SYLLABUS_DIR = BASE_DIR / "Syllabus"
 SCHEDULES_DIR = BASE_DIR / "Schedules"
+
+DRIVE_SYLLABUS_FOLDER_ID = os.getenv("DRIVE_SYLLABUS_FOLDER_ID", "")
+DRIVE_SCHEDULES_FOLDER_ID = os.getenv("DRIVE_SCHEDULES_FOLDER_ID", "")
 DATABASE_PATH = Path(os.getenv("DATABASE_PATH", BASE_DIR / "foster_mba_rag.sqlite3"))
 
 OPENAI_CHAT_MODEL = os.getenv("OPENAI_CHAT_MODEL", "gpt-4.1-mini")

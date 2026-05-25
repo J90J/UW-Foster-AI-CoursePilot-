@@ -53,14 +53,20 @@ source .venv/bin/activate        # macOS / Linux
 # 3. Install dependencies
 pip install -r requirements.txt
 
-# 4. Set your OpenAI API key
+# 4. Configure environment variables
 cp .env.example .env
-# Open .env in any text editor and paste your key next to OPENAI_API_KEY=
+# Open .env and fill in:
+#   OPENAI_API_KEY       — your OpenAI key (platform.openai.com)
+#   DRIVE_SYLLABUS_FOLDER_ID  — Google Drive folder ID for syllabi
+#   DRIVE_SCHEDULES_FOLDER_ID — Google Drive folder ID for schedules
 
-# 5. Build the database from the syllabus PDFs
+# 5. Download course PDFs from Google Drive
+python3 sync_drive.py
+
+# 6. Build the vector database
 python3 ingest.py --reset
 
-# 6. Start the web server
+# 7. Start the web server
 python3 app.py
 ```
 
@@ -115,16 +121,35 @@ The schedule agent automatically detects the quarter from the filename. Files sh
 
 ## Shared file storage (Google Drive)
 
-Syllabi and schedule PDFs are stored in a shared Google Drive folder so both collaborators and the program office can manage the files without needing a GitHub account:
+Syllabi and schedule PDFs live in a shared Google Drive folder. The `sync_drive.py` script downloads them automatically — no Google account required to run the app.
 
-**[Foster MBA Bot — Shared Folder](https://drive.google.com/drive/folders/1O-3lG8Q_FsWx-2x2hOx_M5AWKPNXNQeb)**
+**Main Drive folder:** [Foster MBA Bot](https://drive.google.com/drive/folders/1O-3lG8Q_FsWx-2x2hOx_M5AWKPNXNQeb)
 
-To use the latest files from Drive:
-1. Download the `Syllabus/` and `Schedules/` folders from Drive.
-2. Replace the local folders with the downloaded ones.
-3. Re-run `python3 ingest.py --reset` and restart `app.py`.
+The folder contains two subfolders:
+- `Syllabus/` — all course syllabus PDFs
+- `Schedules/` — all quarterly schedule PDFs
 
-The app itself reads files from the local disk. The Drive folder is a shared storage layer — it does not connect to the app directly. This keeps the setup simple and avoids API credentials for Drive.
+Both subfolders are shared as **"Anyone with the link can view"**, so the sync script works without authentication.
+
+### Updating the Drive folder IDs in .env
+
+Open your `.env` file and set:
+
+```
+DRIVE_SYLLABUS_FOLDER_ID=<the ID from the Syllabus subfolder URL>
+DRIVE_SCHEDULES_FOLDER_ID=<the ID from the Schedules subfolder URL>
+```
+
+The folder ID is the string after `/folders/` in the Google Drive URL.
+
+### Adding new course materials
+
+1. Upload the new PDF to the appropriate Drive subfolder (`Syllabus/` or `Schedules/`)
+2. On your local machine, run: `python3 sync_drive.py`
+3. Rebuild the database: `python3 ingest.py --reset`
+4. Restart `app.py`
+
+The Drive folder is the single source of truth — the program office manages files there, and anyone running the app syncs from it.
 
 ---
 
