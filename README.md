@@ -1,6 +1,6 @@
 # Foster MBA Course Assistant
 
-A course-planning chatbot for UW Foster MBA students. A student describes their goals or interests, and the assistant recommends which courses to take based on the actual syllabus content — and tells them when those courses are most likely offered based on past schedules.
+A course-planning chatbot for UW Foster MBA students. A student describes their goals or interests, and the assistant recommends which courses to take based on actual syllabus content — and tells them when those courses are most likely offered based on past schedules.
 
 > **Built by Jens Jung and Jimmy Yin (Foster MBA, Class of 2026) as a handoff project to the UW Foster MBA Program Office.**
 
@@ -8,11 +8,11 @@ A course-planning chatbot for UW Foster MBA students. A student describes their 
 
 ## What it does
 
-1. **Course recommendations from syllabi** — A student asks something like *"I want to go into venture capital"* or *"Which courses cover sustainability?"* and the assistant searches across all 49 course syllabi to find the best matches, explaining why each course fits.
+1. **Course recommendations from syllabi** — A student asks something like *"I want to go into venture capital"* or *"Which courses cover sustainability?"* and the assistant searches across all course syllabi to find the best matches, explaining why each course fits.
 
-2. **Schedule predictions from past offerings** — After answering, the assistant shows a green panel indicating which quarters a course has historically been offered (e.g., *"FIN 530: seen in Autumn (3×), Winter (2×) — most likely Autumn"*), based on 13 quarterly schedule PDFs from 2024–2026.
+2. **Schedule predictions from past offerings** — After answering, the assistant shows which quarters a course has historically been offered (e.g., *"FIN 530: seen in Autumn (3×), Winter (2×) — most likely Autumn"*), based on past quarterly schedule PDFs.
 
-3. **Scope filtering** — Vague or off-topic questions are caught before they reach the AI. The assistant pushes back with a helpful suggestion on how to rephrase (e.g., *"Try asking: which courses cover corporate finance strategy?"*).
+3. **Scope filtering** — Vague or off-topic questions are caught before they reach the AI. The assistant pushes back with a helpful suggestion on how to rephrase.
 
 ---
 
@@ -53,26 +53,20 @@ source .venv/bin/activate        # macOS / Linux
 # 3. Install dependencies
 pip install -r requirements.txt
 
-# 4. Configure environment variables
+# 4. Set your OpenAI API key
 cp .env.example .env
-# Open .env and fill in:
-#   OPENAI_API_KEY       — your OpenAI key (platform.openai.com)
-#   DRIVE_SYLLABUS_FOLDER_ID  — Google Drive folder ID for syllabi
-#   DRIVE_SCHEDULES_FOLDER_ID — Google Drive folder ID for schedules
+# Open .env and paste your key next to OPENAI_API_KEY=
 
-# 5. Download course PDFs from Google Drive
-python3 sync_drive.py
-
-# 6. Build the vector database
+# 5. Build the database from the syllabus PDFs
 python3 ingest.py --reset
 
-# 7. Start the web server
+# 6. Start the web server
 python3 app.py
 ```
 
 Open [http://127.0.0.1:5001](http://127.0.0.1:5001) in your browser.
 
-The status badge in the top-right corner turns green when the database is ready.
+The status badge in the top-right turns green when the database is ready.
 
 ---
 
@@ -80,8 +74,8 @@ The status badge in the top-right corner turns green when the database is ready.
 
 ```
 fosterMBAbot/
-├── Syllabus/          ← Course syllabus PDFs (source of truth for recommendations)
-├── Schedules/         ← Quarterly schedule PDFs (source of truth for when predictions)
+├── Syllabus/          ← Course syllabus PDFs  ← ADD NEW SYLLABI HERE
+├── Schedules/         ← Quarterly schedule PDFs  ← ADD NEW SCHEDULES HERE
 ├── static/            ← Frontend CSS and JavaScript
 ├── templates/         ← HTML chat interface
 ├── app.py             ← Flask web server and API routes
@@ -106,7 +100,7 @@ fosterMBAbot/
    ```
 3. Restart `app.py`. No other changes needed.
 
-The `--reset` flag clears and rebuilds the entire database. This takes about 1–3 minutes depending on the number of PDFs and your internet connection (OpenAI embedding calls are made per chunk).
+The `--reset` flag clears and rebuilds the entire database. This takes about 1–3 minutes depending on the number of PDFs and your internet connection (OpenAI API calls are made per chunk).
 
 ---
 
@@ -115,41 +109,7 @@ The `--reset` flag clears and rebuilds the entire database. This takes about 1�
 1. Drop the new quarterly schedule PDF into the `Schedules/` folder.
 2. Restart `app.py` (no ingest step needed — schedules are parsed at startup).
 
-The schedule agent automatically detects the quarter from the filename. Files should include `AUT`, `WIN`, `SPR`, or `SUM` in the name (e.g., `AUT 2027 MBA Course Schedules.pdf`). Year-at-a-Glance files are skipped automatically.
-
----
-
-## Shared file storage (Google Drive)
-
-Syllabi and schedule PDFs live in a shared Google Drive folder. The `sync_drive.py` script downloads them automatically — no Google account required to run the app.
-
-**Main Drive folder:** [Foster MBA Bot](https://drive.google.com/drive/folders/1O-3lG8Q_FsWx-2x2hOx_M5AWKPNXNQeb)
-
-The folder contains two subfolders:
-- `Syllabus/` — all course syllabus PDFs
-- `Schedules/` — all quarterly schedule PDFs
-
-Both subfolders are shared as **"Anyone with the link can view"**, so the sync script works without authentication.
-
-### Updating the Drive folder IDs in .env
-
-Open your `.env` file and set:
-
-```
-DRIVE_SYLLABUS_FOLDER_ID=<the ID from the Syllabus subfolder URL>
-DRIVE_SCHEDULES_FOLDER_ID=<the ID from the Schedules subfolder URL>
-```
-
-The folder ID is the string after `/folders/` in the Google Drive URL.
-
-### Adding new course materials
-
-1. Upload the new PDF to the appropriate Drive subfolder (`Syllabus/` or `Schedules/`)
-2. On your local machine, run: `python3 sync_drive.py`
-3. Rebuild the database: `python3 ingest.py --reset`
-4. Restart `app.py`
-
-The Drive folder is the single source of truth — the program office manages files there, and anyone running the app syncs from it.
+The schedule agent automatically detects the quarter from the filename. Files should include `AUT`, `WIN`, `SPR`, or `SUM` in the name (e.g., `AUT 2027 MBA Course Schedules.pdf`).
 
 ---
 
@@ -169,7 +129,7 @@ If a question is too vague (e.g., *"Tell me about business"*), the assistant wil
 ## Cost estimate (OpenAI API)
 
 | Operation | Model | Approx. cost |
-|-----------|-------|--------------|
+|-----------|-------|-------------|
 | Initial ingest (49 syllabi) | text-embedding-3-small | ~$0.02 one-time |
 | Per student question | gpt-4.1-mini + embedding | ~$0.002–0.005 |
 
@@ -177,39 +137,90 @@ At 1,000 questions per month, the running cost is roughly **$2–5/month**. The 
 
 ---
 
-## Program office: taking ownership
+## For the UW Foster MBA Program Office: Taking ownership
 
-When the students who built this graduate, the program office will need to run and maintain this tool independently. Here is what that involves:
+When the students who built this graduate, the program office will need to run and maintain this tool independently. This section explains everything you need to do.
 
-### 1. Get your own OpenAI API key
-- Go to [platform.openai.com](https://platform.openai.com) and create an account.
-- Under **API Keys**, create a new secret key.
-- Paste it into your `.env` file as `OPENAI_API_KEY=sk-...`.
-- Set a monthly spending limit in the OpenAI dashboard (we recommend $20/month to start).
+### What you are taking over
 
-### 2. Fork or copy the repository
-- The code lives at [github.com/jimsteryin/fosterMBAbot](https://github.com/jimsteryin/fosterMBAbot).
-- Either fork it to a UW Foster GitHub account or download the code as a ZIP and upload it to your own account.
-- Create a new Google Drive folder under a Foster-managed Google account and update the link in this README.
+This is a Python web application that runs on a server (or a laptop). It reads course syllabi from a folder of PDF files, builds a local search index, and serves a chat interface. There are no third-party subscriptions beyond OpenAI.
 
-### 3. Keep syllabi and schedules current
-- Each academic year: download new syllabi from Canvas or course websites, add them to `Syllabus/`, and re-run `python3 ingest.py --reset`.
-- Each quarter: add the new schedule PDF to `Schedules/` and restart `app.py`.
+### Step 1 — Get your own OpenAI API key
 
-### 4. Hosting options (if you want students to access it online)
-The app runs anywhere Python runs. Options in order of simplicity:
+- Go to [platform.openai.com](https://platform.openai.com) and create an account using a Foster/UW email.
+- Under **API Keys**, create a new secret key. Copy it immediately — it is only shown once.
+- Go to **Billing → Usage limits** and set a monthly spending limit (we recommend $20/month to start).
+- Paste the key into your `.env` file as `OPENAI_API_KEY=sk-...`
 
-| Option | Cost | Notes |
-|--------|------|-------|
-| Run locally on a staff laptop | Free | Only accessible on that machine |
-| [Render.com](https://render.com) | Free tier available | Push to GitHub → auto-deploys |
-| [Railway.app](https://railway.app) | ~$5/month | Simple, no config needed |
-| UW IT / AWS / Azure | Varies | Ask UW IT for student project hosting |
+### Step 2 — Fork the repository to a Foster-managed GitHub account
 
-For any hosted deployment, set `OPENAI_API_KEY` as an environment variable in the hosting platform's dashboard rather than in a `.env` file.
+The code currently lives at [github.com/jimsteryin/fosterMBAbot](https://github.com/jimsteryin/fosterMBAbot) under a student account. You should copy it to an account you control so you don't lose access when the student graduates.
 
-### 5. No coding required for day-to-day use
-The only recurring tasks are dropping new PDFs into the right folders and re-running the ingest script. No programming knowledge is required for that.
+1. Create a GitHub account for the program office (e.g., `foster-mba-office`) if you don't have one.
+2. Click **Fork** on the repository page — this creates your own copy.
+3. Update the clone URL in this README to point to your fork.
+
+### Step 3 — Set up your cloud environment
+
+You have several options depending on your technical resources. All of them follow the same basic pattern: get a server running Python, clone the repo, configure the `.env` file, run the ingest script, and start the app.
+
+**Option A — Run on a staff laptop (simplest, no cost)**
+
+Only accessible on that machine. Good for demos or internal use.
+
+```bash
+git clone https://github.com/YOUR-ORG/fosterMBAbot.git
+cd fosterMBAbot
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env   # then fill in OPENAI_API_KEY
+python3 ingest.py --reset
+python3 app.py
+```
+
+**Option B — Deploy to Render.com (recommended for student-facing access)**
+
+Render is a cloud hosting platform. The free tier is sufficient for low-traffic use.
+
+1. Go to [render.com](https://render.com) and sign up with your GitHub account.
+2. Click **New → Web Service** and connect your GitHub repository.
+3. Set the following:
+   - **Build Command:** `pip install -r requirements.txt && python ingest.py --reset`
+   - **Start Command:** `python app.py`
+4. Under **Environment**, add `OPENAI_API_KEY` with your key.
+5. Click **Deploy**. Render gives you a public URL (e.g., `https://foster-mba-bot.onrender.com`).
+
+**Option C — Deploy to Railway.app (~$5/month)**
+
+Similar to Render but more reliable for always-on services.
+
+1. Go to [railway.app](https://railway.app) and connect your GitHub repo.
+2. Set `OPENAI_API_KEY` in the environment variables panel.
+3. Railway auto-detects Python and deploys.
+
+**Option D — Ask UW IT for hosting**
+
+UW IT offers hosting for departmental projects. Contact the Foster School IT team and share this README — the app has no unusual infrastructure requirements (just Python 3.11 and outbound internet access for the OpenAI API).
+
+### Step 4 — Keep syllabi and schedules current
+
+This is the main ongoing task. No coding is required.
+
+**Each time a new syllabus is available:**
+1. Save the syllabus as a PDF.
+2. Add it to the `Syllabus/` folder in your copy of the repository.
+3. Run `python3 ingest.py --reset` on your server.
+4. Commit the new PDF to GitHub so it is backed up: `git add Syllabus/ && git commit -m "Add new syllabus" && git push`
+
+**Each quarter, when the new schedule is published:**
+1. Save the schedule as a PDF with the quarter in the filename (e.g., `AUT 2027 MBA Course Schedules.pdf`).
+2. Add it to the `Schedules/` folder.
+3. Restart the app (the schedule is read at startup, no ingest needed).
+4. Commit: `git add Schedules/ && git commit -m "Add AUT 2027 schedule" && git push`
+
+### Step 5 — No coding required for day-to-day use
+
+The only recurring tasks are dropping new PDFs into the right folders, running the ingest script, and restarting the app. A staff member with no programming background can do this by following the steps above.
 
 ---
 
@@ -234,13 +245,13 @@ These can be set in `.env` or as shell environment variables:
 → Run `python3 ingest.py --reset` and wait for it to finish before refreshing.
 
 **`openai.AuthenticationError`**
-→ Your `.env` file is missing `OPENAI_API_KEY` or the key is invalid. Check [platform.openai.com](https://platform.openai.com).
+→ Your `.env` is missing `OPENAI_API_KEY` or the key is invalid. Check [platform.openai.com](https://platform.openai.com).
 
 **Answer says "I don't have enough information"**
 → The relevant syllabus PDF may not be in `Syllabus/` or the database hasn't been rebuilt after adding it.
 
 **Schedule prediction doesn't appear**
-→ The course code wasn't found in any quarterly schedule PDF. Verify the PDF is in `Schedules/` and includes the quarter abbreviation in its filename.
+→ The course wasn't found in any quarterly schedule PDF. Check that the schedule PDF is in `Schedules/` and includes `AUT`, `WIN`, `SPR`, or `SUM` in its filename.
 
 ---
 
