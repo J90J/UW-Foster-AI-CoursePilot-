@@ -42,17 +42,6 @@ function addMessage(role, text, sources = [], scheduleInsight = null) {
     body.appendChild(insight);
   }
 
-  if (sources.length > 0) {
-    const sourceList = document.createElement("ol");
-    sourceList.className = "sources";
-    for (const s of sources) {
-      const li = document.createElement("li");
-      const pages = s.page_start ? `, pp. ${s.page_start}–${s.page_end}` : "";
-      li.textContent = `${s.title} (${s.filename}${pages})`;
-      sourceList.appendChild(li);
-    }
-    body.appendChild(sourceList);
-  }
 
   article.appendChild(body);
   messages.appendChild(article);
