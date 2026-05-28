@@ -123,17 +123,25 @@ def format_context(chunks: list[RetrievedChunk]) -> str:
     return "\n\n".join(blocks)
 
 
-def answer_question(client: OpenAI, question: str, chunks: list[RetrievedChunk]) -> str:
+def answer_question(
+    client: OpenAI,
+    question: str,
+    chunks: list[RetrievedChunk],
+    history: list[dict] | None = None,
+) -> str:
     context = format_context(chunks)
+    messages: list[dict] = [{"role": "system", "content": SYSTEM_PROMPT}]
+    if history:
+        messages.extend(history)
+    messages.append(
+        {
+            "role": "user",
+            "content": f"Course materials:\n{context}\n\nStudent question:\n{question}",
+        }
+    )
     response = client.chat.completions.create(
         model=OPENAI_CHAT_MODEL,
-        messages=[
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {
-                "role": "user",
-                "content": f"Course materials:\n{context}\n\nStudent question:\n{question}",
-            },
-        ],
+        messages=messages,
         temperature=0.2,
     )
     return response.choices[0].message.content or ""

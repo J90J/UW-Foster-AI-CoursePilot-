@@ -4,6 +4,8 @@ const messages  = document.querySelector("#messages");
 const statusEl  = document.querySelector("#status");
 const welcome   = document.querySelector("#welcome");
 
+const history = []; // {role, content} — kept in memory for the session
+
 const ASSISTANT_LABEL = "AI";
 const USER_LABEL = "You";
 
@@ -80,7 +82,7 @@ async function sendMessage(text) {
     const resp = await fetch("/api/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: text }),
+      body: JSON.stringify({ message: text, history }),
     });
     const payload = await resp.json();
     thinking.remove();
@@ -90,10 +92,16 @@ async function sendMessage(text) {
       return;
     }
     if (payload.blocked) {
-      addMessage("assistant", `${payload.relevance.reason}\n\nTry: ${payload.relevance.suggested_rewrite}`);
+      const reply = `${payload.relevance.reason}\n\nTry: ${payload.relevance.suggested_rewrite}`;
+      addMessage("assistant", reply);
+      // Still track blocked exchanges so context isn't lost
+      history.push({ role: "user", content: text });
+      history.push({ role: "assistant", content: reply });
       return;
     }
-    addMessage("assistant", payload.answer, payload.sources || [], payload.schedule_insight || null);
+    history.push({ role: "user", content: text });
+    history.push({ role: "assistant", content: payload.answer });
+    addMessage("assistant", payload.answer, [], payload.schedule_insight || null);
   } catch {
     thinking.remove();
     addMessage("assistant", "Could not reach the server. Check that app.py is running.");

@@ -18,13 +18,15 @@ requests unrelated to MBA course planning.
 Return only compact JSON with keys: in_scope (boolean), reason (string), suggested_rewrite (string)."""
 
 
-def evaluate_relevance(client: OpenAI, message: str) -> dict[str, object]:
+def evaluate_relevance(client: OpenAI, message: str, history: list[dict] | None = None) -> dict[str, object]:
+    messages: list[dict] = [{"role": "system", "content": RELEVANCE_SYSTEM_PROMPT}]
+    # Include recent history so short follow-ups like "great. what else" are understood in context
+    if history:
+        messages.extend(history[-4:])
+    messages.append({"role": "user", "content": message})
     response = client.chat.completions.create(
         model=OPENAI_CHAT_MODEL,
-        messages=[
-            {"role": "system", "content": RELEVANCE_SYSTEM_PROMPT},
-            {"role": "user", "content": message},
-        ],
+        messages=messages,
         temperature=0,
         response_format={"type": "json_object"},
     )

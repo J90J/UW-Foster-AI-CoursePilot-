@@ -60,12 +60,25 @@ def chat():
     except Exception as error:
         return jsonify({"error": f"OpenAI client is not configured: {error}"}), 503
 
-    relevance = evaluate_relevance(client, question)
+    history = [
+        {"role": str(m.get("role", "")), "content": str(m.get("content", ""))}
+        for m in (payload.get("history") or [])
+        if m.get("role") in ("user", "assistant") and m.get("content")
+    ][-8:]  # keep last 4 exchanges max
+
+    relevance = evaluate_relevance(client, question, history)
     if not relevance["in_scope"]:
         return jsonify({"blocked": True, "relevance": relevance})
 
-    chunks = retrieve(client, question)
-    answer = answer_question(client, question, chunks)
+    # For retrieval: enrich short follow-up questions with prior context
+    retrieval_query = question
+    if len(question.split()) < 8 and history:
+        prior = " ".join(m["content"] for m in history[-2:] if m["role"] == "user")
+        if prior:
+            retrieval_query = f"{prior} {question}"
+
+    chunks = retrieve(client, retrieval_query)
+    answer = answer_question(client, question, chunks, history)
 
     codes = extract_codes_from_chunks([(c.title, c.filename) for c in chunks])
     schedule_insight = predict_offerings(codes)
