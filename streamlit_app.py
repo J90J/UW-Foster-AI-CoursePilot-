@@ -64,8 +64,8 @@ st.markdown(
         border-radius: 1px;
     }
     .pillar-shaft.tall   { height: 80px; }
-    .pillar-shaft.medium { height: 64px; }
-    .pillar-shaft.short  { height: 52px; }
+    .pillar-shaft.medium { height: 80px; }
+    .pillar-shaft.short  { height: 80px; }
     .pillar-base {
         width: 34px; height: 6px;
         background: rgba(255,255,255,0.85);
