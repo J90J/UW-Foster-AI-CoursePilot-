@@ -1,21 +1,7 @@
-"""Foster MBA Course Assistant — Streamlit front-end."""
+"""Foster MBA Course Assistant — Streamlit front-end (public demo)."""
 from __future__ import annotations
 
-import os
-
 import streamlit as st
-
-# Pull secrets into env vars before importing project modules
-# (works both locally via .env and on Streamlit Cloud via st.secrets)
-for _key in ["OPENAI_API_KEY", "OPENAI_CHAT_MODEL", "OPENAI_EMBEDDING_MODEL"]:
-    if _key not in os.environ and _key in st.secrets:
-        os.environ[_key] = st.secrets[_key]
-
-from openai import OpenAI  # noqa: E402
-
-from rag import answer_question, retrieve, source_payload  # noqa: E402
-from relevance_agent import evaluate_relevance  # noqa: E402
-from schedule_agent import extract_codes_from_chunks, predict_offerings  # noqa: E402
 
 # ── Page config ──────────────────────────────────────────────────────────────
 st.set_page_config(
@@ -208,10 +194,15 @@ st.markdown(
 if "messages" not in st.session_state:
     st.session_state.messages = []  # [{role, content}]
 
-if "openai_client" not in st.session_state:
-    st.session_state.openai_client = OpenAI()
-
-client = st.session_state.openai_client
+ACCESS_DENIED = (
+    "🎓 **This tool is exclusively available to enrolled UW Foster MBA students.**\n\n"
+    "Due to intellectual property restrictions and the proprietary nature of the course "
+    "materials used to power this assistant, public access to the full functionality is "
+    "not permitted at this time.\n\n"
+    "If you are a current Foster MBA student, please reach out to the program office "
+    "to learn how to access this tool through official channels.\n\n"
+    "_Michael G. Foster School of Business — University of Washington, Seattle_"
+)
 
 # ── Suggestion chips (only on empty chat) ────────────────────────────────────
 SUGGESTIONS = [
@@ -265,37 +256,12 @@ user_input = st.chat_input("Ask about Foster MBA courses…") or pending
 
 if user_input:
     question = user_input.strip()
-    history = st.session_state.messages[-8:]
 
-    # Optimistic display
     st.markdown(
         f'<div class="user-msg"><div class="user-bubble">{question}</div></div>',
         unsafe_allow_html=True,
     )
 
-    with st.spinner(""):
-        # Relevance check
-        relevance = evaluate_relevance(client, question, history)
-
-        if not relevance["in_scope"]:
-            reply = f"{relevance['reason']}\n\nTry: {relevance['suggested_rewrite']}"
-            st.session_state.messages.append({"role": "user", "content": question})
-            st.session_state.messages.append({"role": "assistant", "content": reply})
-            st.rerun()
-
-        # Enrich short follow-ups for retrieval
-        retrieval_query = question
-        if len(question.split()) < 8 and history:
-            prior = " ".join(m["content"] for m in history[-2:] if m["role"] == "user")
-            if prior:
-                retrieval_query = f"{prior} {question}"
-
-        chunks = retrieve(client, retrieval_query)
-        answer = answer_question(client, question, chunks, history)
-
-        codes = extract_codes_from_chunks([(c.title, c.filename) for c in chunks])
-        insight = predict_offerings(codes)
-
     st.session_state.messages.append({"role": "user", "content": question})
-    st.session_state.messages.append({"role": "assistant", "content": answer, "insight": insight})
+    st.session_state.messages.append({"role": "assistant", "content": ACCESS_DENIED})
     st.rerun()
