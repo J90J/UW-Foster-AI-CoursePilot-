@@ -2,3 +2,4 @@ flask
 openai
 pypdf
 python-dotenv
+streamlit
