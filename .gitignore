@@ -19,10 +19,12 @@ open_ai_key.txt
 *openai*key*.txt
 *api*key*.txt
 
-# Local generated data — allow the committed DB for Streamlit Cloud
+# Local data — never commit
+*.sqlite3
 *.sqlite
 *.db
-# foster_mba_rag.sqlite3 is intentionally committed
+Syllabus/
+Schedules/
 
 # Streamlit secrets (real keys — example file is allowed)
 .streamlit/secrets.toml
