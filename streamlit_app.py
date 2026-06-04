@@ -7,7 +7,7 @@ import streamlit as st
 # ── ACCESS FLAG ───────────────────────────────────────────────────────────────
 # Set to False when handing over to the program office for full deployment.
 # That single change enables the complete RAG pipeline.
-PUBLIC_DEMO_MODE = True
+PUBLIC_DEMO_MODE = False
 
 # Pull secrets into env vars (Streamlit Cloud uses st.secrets; local uses .env)
 if not PUBLIC_DEMO_MODE:
