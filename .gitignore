@@ -19,12 +19,9 @@ open_ai_key.txt
 *openai*key*.txt
 *api*key*.txt
 
-# Local data — never commit
-*.sqlite3
+# Local data
 *.sqlite
 *.db
-Syllabus/
-Schedules/
 
 # Streamlit secrets (real keys — example file is allowed)
 .streamlit/secrets.toml
