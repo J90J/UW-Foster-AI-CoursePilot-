@@ -35,10 +35,12 @@ st.markdown(
     /* Hide Streamlit chrome */
     #MainMenu, footer, header { visibility: hidden; }
     .block-container { padding-top: 0 !important; max-width: 780px; }
+    .stApp { font-family: 'Courier New', 'IBM Plex Mono', monospace; }
 
-    /* ── Hero header ── */
+    /* ── Hero header: dark academic hall, brass-on-stone pillars ── */
     .hero {
-        background: linear-gradient(135deg, #4c1d95 0%, #7c3aed 60%, #a78bfa 100%);
+        background: linear-gradient(135deg, #14091f 0%, #2b1246 55%, #38006B 100%);
+        border-bottom: 1px solid rgba(241,182,134,0.25);
         border-radius: 0 0 18px 18px;
         padding: 0 0 28px 0;
         margin-bottom: 28px;
@@ -46,7 +48,7 @@ st.markdown(
         overflow: hidden;
     }
 
-    /* Four pillars */
+    /* Four pillars, engraved brass */
     .pillars-row {
         display: flex;
         justify-content: center;
@@ -58,40 +60,46 @@ st.markdown(
     .pillar-wrap { display: flex; flex-direction: column; align-items: center; }
     .pillar-cap {
         width: 38px; height: 8px;
-        background: rgba(255,255,255,0.9);
+        background: linear-gradient(90deg, #83502C, #F1B686);
         border-radius: 3px 3px 0 0;
     }
     .pillar-shaft {
         width: 22px;
-        background: linear-gradient(to right, rgba(255,255,255,0.6), rgba(255,255,255,0.95), rgba(255,255,255,0.6));
+        background: linear-gradient(to right, #6e4526, #C17E40, #F1B686, #C17E40, #6e4526);
         border-radius: 1px;
+        opacity: 0.9;
     }
     .pillar-shaft.tall   { height: 80px; }
     .pillar-shaft.medium { height: 80px; }
     .pillar-shaft.short  { height: 80px; }
     .pillar-base {
         width: 34px; height: 6px;
-        background: rgba(255,255,255,0.85);
+        background: linear-gradient(90deg, #83502C, #F1B686);
         border-radius: 0 0 3px 3px;
     }
     .pillar-step {
         width: 100%;
         height: 6px;
-        background: rgba(255,255,255,0.4);
+        background: rgba(241,182,134,0.25);
         border-radius: 0 0 4px 4px;
     }
 
-    /* Hero text */
+    /* Hero text — same shiny purple/bronze gradient as jensjungs.com */
     .hero-title {
-        color: #ffffff;
+        font-family: 'Courier New', monospace;
         font-size: 26px;
         font-weight: 700;
-        letter-spacing: -0.02em;
+        letter-spacing: -0.01em;
         margin: 14px 0 4px;
         line-height: 1.2;
+        background: linear-gradient(120deg, #E1BEE7, #C17E40 50%, #F1B686 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        filter: drop-shadow(0 0 12px rgba(193,126,64,0.3));
     }
     .hero-sub {
-        color: rgba(255,255,255,0.75);
+        color: rgba(232,227,240,0.6);
         font-size: 13px;
         margin: 0;
     }
@@ -101,7 +109,7 @@ st.markdown(
         display: flex; justify-content: flex-end; margin: 6px 0;
     }
     .user-bubble {
-        background: #7c3aed;
+        background: linear-gradient(135deg, #4A148C, #7B1FA2);
         color: #fff;
         padding: 11px 16px;
         border-radius: 18px 4px 18px 18px;
@@ -113,32 +121,34 @@ st.markdown(
     .ai-msg { display: flex; align-items: flex-start; gap: 10px; margin: 6px 0; }
     .ai-avatar {
         width: 30px; height: 30px; border-radius: 50%;
-        background: #ede9fe; color: #7c3aed;
+        background: linear-gradient(135deg, #83502C, #F1B686);
+        color: #14091f;
         display: flex; align-items: center; justify-content: center;
         font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 2px;
     }
     .ai-bubble {
-        background: #ffffff;
-        border: 1px solid #e4e0f5;
+        background: #150F22;
+        border: 1px solid rgba(255,255,255,0.12);
         padding: 11px 16px;
         border-radius: 4px 18px 18px 18px;
         max-width: 82%;
         font-size: 15px;
         line-height: 1.65;
         word-break: break-word;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        color: #E8E3F0;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.3);
         white-space: pre-wrap;
     }
 
-    /* Schedule insight */
+    /* Schedule insight — brass plaque */
     .insight {
-        background: #ede9fe;
-        border-left: 3px solid #7c3aed;
+        background: rgba(193,126,64,0.1);
+        border-left: 3px solid #C17E40;
         border-radius: 10px;
         padding: 10px 14px;
         font-size: 13px;
         line-height: 1.7;
-        color: #1a1a2e;
+        color: #E8DFC8;
         margin-top: 8px;
         max-width: 82%;
         margin-left: 40px;
@@ -152,22 +162,24 @@ st.markdown(
 
     /* Override Streamlit button style for chips */
     div[data-testid="column"] .stButton > button {
-        border: 1.5px solid #c4b5fd !important;
+        border: 1.5px solid rgba(156,77,204,0.5) !important;
         border-radius: 999px !important;
-        background: #ffffff !important;
-        color: #5b21b6 !important;
+        background: #150F22 !important;
+        color: #D8C4F0 !important;
         font-size: 13px !important;
         padding: 6px 16px !important;
+        font-family: 'Courier New', monospace !important;
         transition: all .15s !important;
     }
     div[data-testid="column"] .stButton > button:hover {
-        background: #ede9fe !important;
-        border-color: #7c3aed !important;
+        background: rgba(193,126,64,0.15) !important;
+        border-color: #C17E40 !important;
+        color: #F1B686 !important;
     }
 
     /* Input */
-    .stChatInput > div { border-color: #c4b5fd !important; border-radius: 24px !important; }
-    .stChatInput > div:focus-within { border-color: #7c3aed !important; box-shadow: 0 0 0 3px rgba(124,58,237,.12) !important; }
+    .stChatInput > div { border-color: rgba(156,77,204,0.5) !important; border-radius: 24px !important; }
+    .stChatInput > div:focus-within { border-color: #C17E40 !important; box-shadow: 0 0 0 3px rgba(193,126,64,.15) !important; }
     </style>
     """,
     unsafe_allow_html=True,
