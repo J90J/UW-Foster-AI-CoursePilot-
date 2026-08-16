@@ -35,7 +35,7 @@ st.markdown(
     /* Hide Streamlit chrome */
     #MainMenu, footer, header { visibility: hidden; }
     .block-container { padding-top: 0 !important; max-width: 780px; }
-    .stApp { font-family: 'Courier New', 'IBM Plex Mono', monospace; }
+    .stApp { font-family: Georgia, 'Iowan Old Style', 'Times New Roman', serif; }
 
     /* ── Hero header: dark academic hall, brass-on-stone pillars ── */
     .hero {
@@ -84,22 +84,21 @@ st.markdown(
         border-radius: 0 0 4px 4px;
     }
 
-    /* Hero text — same shiny purple/bronze gradient as jensjungs.com */
+    /* Hero text — engraved brass plaque, not a shiny gradient */
     .hero-title {
-        font-family: 'Courier New', monospace;
-        font-size: 26px;
+        font-family: Georgia, 'Times New Roman', serif;
+        font-size: 27px;
         font-weight: 700;
-        letter-spacing: -0.01em;
+        font-variant: small-caps;
+        letter-spacing: 0.03em;
         margin: 14px 0 4px;
         line-height: 1.2;
-        background: linear-gradient(120deg, #E1BEE7, #C17E40 50%, #F1B686 100%);
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-        filter: drop-shadow(0 0 12px rgba(193,126,64,0.3));
+        color: #E8C468;
+        text-shadow: 0 1px 0 rgba(0,0,0,0.5), 0 0 10px rgba(232,196,104,0.25);
     }
     .hero-sub {
-        color: rgba(232,227,240,0.6);
+        font-style: italic;
+        color: rgba(232,227,240,0.55);
         font-size: 13px;
         margin: 0;
     }
@@ -163,12 +162,13 @@ st.markdown(
     /* Override Streamlit button style for chips */
     div[data-testid="column"] .stButton > button {
         border: 1.5px solid rgba(156,77,204,0.5) !important;
-        border-radius: 999px !important;
+        border-radius: 4px !important;
         background: #150F22 !important;
         color: #D8C4F0 !important;
         font-size: 13px !important;
         padding: 6px 16px !important;
-        font-family: 'Courier New', monospace !important;
+        font-family: Georgia, 'Times New Roman', serif !important;
+        font-style: italic;
         transition: all .15s !important;
     }
     div[data-testid="column"] .stButton > button:hover {
